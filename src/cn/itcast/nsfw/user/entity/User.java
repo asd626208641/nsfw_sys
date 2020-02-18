@@ -91,6 +91,10 @@ public class User {
 		return gender;
 	}
 
+	public boolean isGender() {
+		return gender;
+	}
+
 	public void setGender(Boolean gender) {
 		this.gender = gender;
 	}

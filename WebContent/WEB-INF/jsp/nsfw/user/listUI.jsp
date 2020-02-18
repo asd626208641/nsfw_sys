@@ -5,36 +5,47 @@
 <title>用户管理</title>
 <%@include file="/common/header.jsp"%>
 <script type="text/javascript">
-      	//全选、全反选
-		function doSelectAll(){
-			// jquery 1.6 前
-			//$("input[name=selectedRow]").attr("checked", $("#selAll").is(":checked"));
-			//prop jquery 1.6+建议使用
-			$("input[name=selectedRow]").prop("checked", $("#selAll").is(":checked"));		
-		}
-      	
-      	function doAdd(){
-      		document.forms[0].action="${basePath}nsfw/user_addUI.action";
-      		document.forms[0].submit();
-      	}
+	//全选、全反选
+	function doSelectAll() {
+		// jquery 1.6 前
+		//$("input[name=selectedRow]").attr("checked", $("#selAll").is(":checked"));
+		//prop jquery 1.6+建议使用
+		$("input[name=selectedRow]").prop("checked",
+				$("#selAll").is(":checked"));
+	}
 
-		//编辑      	
-      	function doEdit(id){
-      		document.forms[0].action="${basePath}nsfw/user_editUI.action?user.id="+id;
-      		document.forms[0].submit();
-      	}
-      	//删除
-      	function doDelete(id){
-      		document.forms[0].action="${basePath}nsfw/user_delete.action?user.id="+id;
-      		document.forms[0].submit();
-      	}
-      	//批量删除
-      	function doDeleteAll(){
-      		document.forms[0].action="${basePath}nsfw/user_deleteSelected.action";
-      		document.forms[0].submit();
-      	}
-      	
-    </script>
+	function doAdd() {
+		document.forms[0].action = "${basePath}nsfw/user_addUI.action";
+		document.forms[0].submit();
+	}
+
+	//编辑      	
+	function doEdit(id) {
+		document.forms[0].action = "${basePath}nsfw/user_editUI.action?user.id="
+				+ id;
+		document.forms[0].submit();
+	}
+	//删除
+	function doDelete(id) {
+		document.forms[0].action = "${basePath}nsfw/user_delete.action?user.id="
+				+ id;
+		document.forms[0].submit();
+	}
+	//批量删除
+	function doDeleteAll() {
+		document.forms[0].action = "${basePath}nsfw/user_deleteSelected.action";
+		document.forms[0].submit();
+	}
+	//导出用户列表
+	function doExportExcel() {
+		window.open("${basePath}nsfw/user_exportExcel.action")
+	}
+	//导入用户 	
+	function doImportExcel() {
+		document.forms[0].action = "${basePath}nsfw/user_importExcel.action"     //excel是一个提交
+		document.forms[0].submit();
+	}
+</script>
 </head>
 <body class="rightBody">
 	<form name="form1" action="" method="post"
@@ -75,21 +86,23 @@
 								<td width="100" align="center">操作</td>
 							</tr>
 							<s:iterator value="userList" status="st">
-								<tr<s:if test="#st.odd">bgcolor="f8f8f8"</s:if>>
-                                    <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='id'/>" /></td>
-									<td align="center"><s:property value="name"/></td>
-									<td align="center"><s:property value="account"/></td>
-									<td align="center"><s:property value="dept"/></td>
-									<td align="center"><s:property value="gender?'男':'女' "/></td>
-									<td align="center"><s:property value="email"/></td>
-									<td align="center"><a href="javascript:doEdit('<s:property value="id"/>')">编辑</a>
-										<a href="javascript:doDelete('<s:property value="id"/>')">删除</a></td>
+								<tr <s:if test="#st.odd">bgcolor="f8f8f8"</s:if>>
+									<td align="center"><input type="checkbox"
+										name="selectedRow" value="<s:property value='id'/>" /></td>
+									<td align="center"><s:property value="name" /></td>
+									<td align="center"><s:property value="account" /></td>
+									<td align="center"><s:property value="dept" /></td>
+									<td align="center"><s:property value="gender?'男':'女' " /></td>
+									<td align="center"><s:property value="email" /></td>
+									<td align="center"><a
+										href="javascript:doEdit('<s:property value="id"/>')">编辑</a> <a
+										href="javascript:doDelete('<s:property value="id"/>')">删除</a></td>
 								</tr>
 							</s:iterator>
 						</table>
 					</div>
 				</div>
-				
+
 				<div class="c_pate" style="margin-top: 5px;">
 					<table width="100%" class="pageDown" border="0" cellspacing="0"
 						cellpadding="0">
