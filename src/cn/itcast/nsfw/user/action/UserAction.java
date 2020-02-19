@@ -2,26 +2,21 @@ package cn.itcast.nsfw.user.action;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Resource;
-import javax.servlet.Servlet;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.ObjectUtils.Null;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.aspectj.util.FileUtil;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-import antlr.StringUtils;
 import cn.itcast.nsfw.user.entity.User;
 import cn.itcast.nsfw.user.service.UserService;
-import sun.swing.FilePane;
 
 public class UserAction extends ActionSupport {
 	@Resource
@@ -167,18 +162,19 @@ public class UserAction extends ActionSupport {
 		return "list";
 	}
 
-	// 校验账号的唯一性
-	public void verifyAccount() {
-		// 1.获取账号
+	//校验用户帐号唯一
+	public void verifyAccount(){
 		try {
-			if (user != null && user.getName() != null && user.getName() != "") {
-				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getName());
+			//1、获取帐号
+			if(user != null && StringUtils.isNotBlank(user.getAccount())){
+				//2、根据帐号到数据库中校验是否存在该帐号对应的用户
+				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getAccount());
 				String strResult = "true";
-				if (list != null && list.size() > 0) {
-					// 说明该账号存在
+				if(list != null && list.size() > 0){
+					//说明该帐号已经存在
 					strResult = "false";
-				}
-				// 输出
+				}	
+				//输出
 				HttpServletResponse response = ServletActionContext.getResponse();
 				response.setContentType("text/html");
 				ServletOutputStream outputStream = response.getOutputStream();
@@ -186,7 +182,6 @@ public class UserAction extends ActionSupport {
 				outputStream.close();
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

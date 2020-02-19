@@ -11,4 +11,5 @@ public interface UserDao extends BaseDao<User> {
 	 */
 	List<User> findUserByAccountAndId(String id, String account);
 	
+	
 }
