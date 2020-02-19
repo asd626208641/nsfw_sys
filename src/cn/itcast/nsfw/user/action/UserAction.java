@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.Servlet;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.ObjectUtils.Null;
@@ -17,6 +18,7 @@ import org.aspectj.util.FileUtil;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import antlr.StringUtils;
 import cn.itcast.nsfw.user.entity.User;
 import cn.itcast.nsfw.user.service.UserService;
 import sun.swing.FilePane;
@@ -149,7 +151,7 @@ public class UserAction extends ActionSupport {
 			}
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block 
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -163,6 +165,30 @@ public class UserAction extends ActionSupport {
 			}
 		}
 		return "list";
+	}
+
+	// 校验账号的唯一性
+	public void verifyAccount() {
+		// 1.获取账号
+		try {
+			if (user != null && user.getName() != null && user.getName() != "") {
+				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getName());
+				String strResult = "true";
+				if (list != null && list.size() > 0) {
+					// 说明该账号存在
+					strResult = "false";
+				}
+				// 输出
+				HttpServletResponse response = ServletActionContext.getResponse();
+				response.setContentType("text/html");
+				ServletOutputStream outputStream = response.getOutputStream();
+				outputStream.write(strResult.getBytes());
+				outputStream.close();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void setUserList(List<User> userList) {
@@ -232,7 +258,5 @@ public class UserAction extends ActionSupport {
 	public void setUserExcelFileName(String userExcelFileName) {
 		this.userExcelFileName = userExcelFileName;
 	}
-	
-	
 
 }

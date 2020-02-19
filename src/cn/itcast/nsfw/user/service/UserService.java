@@ -25,6 +25,11 @@ public interface UserService {
 	public List<User> findObjects();
 	//导出用户列表
 	public void exportExcel(List<User> userList, ServletOutputStream outputStream);
-
+	//导出用户列表
 	public void importExcel(File userExcel, String userExcelFileName);
+	
+	/*
+	 * 根据账号和id来查找用户
+	*/
+	public List<User> findUserByAccountAndId(String id, String account);
 }

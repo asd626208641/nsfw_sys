@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			FileInputStream fileInputStream = new FileInputStream(userExcel);
 			boolean is03Excel = userExcelFileName.matches("^.+\\.(?i)(xls)$");
-			// 1.读取工作簿 
+			// 1.读取工作簿
 			Workbook workbook = is03Excel ? new HSSFWorkbook(fileInputStream) : new XSSFWorkbook(fileInputStream);
 			// 2.读取工作表
 			Sheet sheet = workbook.getSheetAt(0);
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 				User user = null;
 				for (int k = 2; k < sheet.getPhysicalNumberOfRows(); k++) {
 					// 获取行
-					user=new User();
+					user = new User();
 					Row row = sheet.getRow(k);
 					// 获取用户名
 					Cell cell0 = row.getCell(0);
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 					user.setDept(cell2.getStringCellValue());
 					// 获取性别
 					Cell cell3 = row.getCell(3);
-					user.setGender(cell3.getStringCellValue().equals("男"));	
+					user.setGender(cell3.getStringCellValue().equals("男"));
 					// 获取手机号
 					String mobile = "";
 					Cell cell4 = row.getCell(4);
@@ -134,6 +134,11 @@ public class UserServiceImpl implements UserService {
 			// TODO Auto-generated catch block
 			System.out.println("用户格式输入错误");
 		}
+	}
+
+	@Override
+	public List<User> findUserByAccountAndId(String id, String account) {
+		return userDao.findUserByAccountAndId(id, account);
 	}
 
 }

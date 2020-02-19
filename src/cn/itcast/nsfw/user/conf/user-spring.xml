@@ -14,7 +14,6 @@
 		class="cn.itcast.nsfw.user.dao.Impl.UserDaoImpl" parent="baseDao">      <!-- 这里为什么能注入到父类，不明白 -->
 	</bean>
 
-
 	<context:component-scan
 		base-package="cn.itcast.nsfw.user.service.Impl"></context:component-scan>
 </beans>

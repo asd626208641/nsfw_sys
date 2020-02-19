@@ -9,12 +9,11 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-
+ 
 	<bean id="testDao" class="cn.itcast.test.dao.Impl.TestDaoImpl">      <!-- 这里为什么能注入到父类，不明白 --> 
 		<property name="sessionFactory" ref="sessionFactory" ></property>
-	</bean>
-
-
+	</bean>  
+ 
 	<context:component-scan
 		base-package="cn.itcast.test.service.Impl"></context:component-scan>
 </beans>
