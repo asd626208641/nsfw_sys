@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 
+import cn.itcast.core.exception.ServiceException;
 import cn.itcast.nsfw.user.entity.User;
 
 public interface UserService {
@@ -22,14 +23,16 @@ public interface UserService {
 	public User findObjectById(Serializable id);
 
 	// 查找列表
-	public List<User> findObjects();
-	//导出用户列表
+	public List<User> findObjects() throws ServiceException;
+
+	// 导出用户列表
 	public void exportExcel(List<User> userList, ServletOutputStream outputStream);
-	//导出用户列表
+
+	// 导出用户列表
 	public void importExcel(File userExcel, String userExcelFileName);
-	
+
 	/*
 	 * 根据账号和id来查找用户
-	*/
+	 */
 	public List<User> findUserByAccountAndId(String id, String account);
 }

@@ -14,10 +14,10 @@ import cn.itcast.nsfw.user.entity.User;
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
 	@Override
-	public List<User> findUserByAccountAndId(String id, String account)  {
+	public List<User> findUserByAccountAndId(String id, String account) {
 		String hql = "FROM User WHERE ACCOUNT=?";
 		if (StringUtils.isNotBlank(id)) {
-			hql += " AND ID=?";
+			hql += " AND ID!=?";
 		}
 		Query query = getSession().createQuery(hql);
 		query.setParameter(0, account);

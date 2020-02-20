@@ -13,17 +13,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.aspectj.util.FileUtil;
 
-import com.opensymphony.xwork2.ActionSupport;
-
+import cn.itcast.core.action.BaseAction;
+import cn.itcast.core.exception.ActionException;
+import cn.itcast.core.exception.ServiceException;
+import cn.itcast.core.exception.SysException;
 import cn.itcast.nsfw.user.entity.User;
 import cn.itcast.nsfw.user.service.UserService;
 
-public class UserAction extends ActionSupport {
+public class UserAction extends BaseAction {
 	@Resource
 	private UserService userService;
 	private List<User> userList;
 	private User user;
-	private String[] selectedRow;
+
 	private File headImg; // 这是struts为我们以及封装好了 只要headImg名字与前面一致 后面两个名字+ContentType 这样类型 再get set方法就可以自动获取了
 	private String headImgContentType;
 	private String headImgFileName;
@@ -33,8 +35,13 @@ public class UserAction extends ActionSupport {
 	private String userExcelFileName;
 
 	// 列表页面
-	public String listUI() {
-		userList = userService.findObjects();
+	public String listUI() throws Exception {
+		try {
+			userList = userService.findObjects();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			throw new Exception(e.getMessage());
+		}
 		return "listUI";
 	}
 
@@ -162,19 +169,20 @@ public class UserAction extends ActionSupport {
 		return "list";
 	}
 
-	//校验用户帐号唯一
-	public void verifyAccount(){
+	// 校验用户帐号唯一
+	public void verifyAccount() {
 		try {
-			//1、获取帐号
-			if(user != null && StringUtils.isNotBlank(user.getAccount())){
-				//2、根据帐号到数据库中校验是否存在该帐号对应的用户
+			// 1、获取帐号
+			if (user != null && StringUtils.isNotBlank(user.getAccount())) {
+				// 2、根据帐号到数据库中校验是否存在该帐号对应的用户
+				System.out.println(user.getId());
 				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getAccount());
 				String strResult = "true";
-				if(list != null && list.size() > 0){
-					//说明该帐号已经存在
+				if (list != null && list.size() > 0) {
+					// 说明该帐号已经存在
 					strResult = "false";
-				}	
-				//输出
+				}
+				// 输出
 				HttpServletResponse response = ServletActionContext.getResponse();
 				response.setContentType("text/html");
 				ServletOutputStream outputStream = response.getOutputStream();
@@ -196,14 +204,6 @@ public class UserAction extends ActionSupport {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public String[] getSelectedRow() {
-		return selectedRow;
-	}
-
-	public void setSelectedRow(String[] selectedRow) {
-		this.selectedRow = selectedRow;
 	}
 
 	public File getHeadImg() {

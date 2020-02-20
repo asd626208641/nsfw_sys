@@ -17,5 +17,24 @@
 	<include file="cn/itcast/test/conf/test-struts.xml" />
 	<!-- 包含用戶的struts配置文件 -->
 	<include file="cn/itcast/nsfw/user/conf/user-struts.xml" />
-	
+
+	<!-- 配置全局异常处理及异常映射 -->
+	<package name="base-default" extends="struts-default">
+		<!-- 返回结果类型 -->
+		<result-types>
+			<result-type name="error" class="cn.itcast.core.action.SysResultAction"></result-type>
+		</result-types>
+		<!-- 全局返回结果-->
+		<global-results>
+			<result name="sysError">/WEB-INF/jsp/error.jsp</result>
+			<result name="input">/WEB-INF/jsp/error.jsp</result>
+			<result name="error" type="error">/WEB-INF/jsp/error.jsp</result>
+		</global-results>
+		<!-- 全局异常映射 -->
+		<global-exception-mappings>
+			<exception-mapping result="sysError" exception="cn.itcast.core.exception.SysException"></exception-mapping>
+			<exception-mapping result="input" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+
 </struts>

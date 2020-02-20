@@ -6,7 +6,7 @@
 
 <struts>
 	<package name="user-action" namespace="/nsfw"
-		extends="struts-default">
+		extends="base-default">
 		<action name="user_*"
 			class="cn.itcast.nsfw.user.action.UserAction" method="{1}">
 			<result name="{1}">/WEB-INF/jsp/nsfw/user/{1}.jsp</result>  <!--/web-inf 表示直接定位到这个根目录下 -->

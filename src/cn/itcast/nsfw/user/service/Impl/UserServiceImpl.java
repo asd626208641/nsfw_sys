@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import cn.itcast.core.exception.ServiceException;
 import cn.itcast.core.util.ExcelUtil;
 import cn.itcast.nsfw.user.dao.UserDao;
 import cn.itcast.nsfw.user.entity.User;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findObjects() {
+	public List<User> findObjects() throws ServiceException {
 		// TODO Auto-generated method stub
 		return userDao.findObjects();
 	}
