@@ -16,7 +16,7 @@ public class User {
 	private Date birthday;
 	private String memo;
 
-	// 用户状态
+	// 用户状态,在userService中用到了下面的参数设置用户的默认状态
 	public static String USER_STATE_VALID = "1";
 	public static String USER_STATE_INVALID = "0";
 
