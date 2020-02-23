@@ -26,8 +26,11 @@ import org.springframework.stereotype.Service;
 
 import cn.itcast.core.exception.ServiceException;
 import cn.itcast.core.util.ExcelUtil;
+import cn.itcast.nsfw.role.entity.Role;
 import cn.itcast.nsfw.user.dao.UserDao;
 import cn.itcast.nsfw.user.entity.User;
+import cn.itcast.nsfw.user.entity.UserRole;
+import cn.itcast.nsfw.user.entity.UserRoleId;
 import cn.itcast.nsfw.user.service.UserService;
 
 @Service("userService")
@@ -140,6 +143,43 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findUserByAccountAndId(String id, String account) {
 		return userDao.findUserByAccountAndId(id, account);
+	}
+
+	@Override
+	public void updateUserAndRole(User user, String... RoleId) {
+		// 根据用户删除用户所有角色
+		userDao.deleteUserRoleByUserId(user.getId());
+		// 更新用户
+		save(user);
+		// 更新用户对应的角色
+		if (RoleId != null) {
+			for (String roleId : RoleId) {
+				userDao.saveUserRole(new UserRole(new UserRoleId(new Role(roleId), user.getId())));
+			}
+		}
+	}
+
+	@Override
+	public void saveUserAndRole(User user, String... RoleId) {
+		// 保存用户
+		save(user);
+		// 保存用户对应的角色
+		if (RoleId != null) {
+			for (String roleId : RoleId) {
+				userDao.saveUserRole(new UserRole(new UserRoleId(new Role(roleId), user.getId())));
+			}
+		}
+	}
+
+	@Override
+	public List<UserRole> getUserRolesByUserId(String id) {
+		return userDao.getUserRolesByUserId(id);
+	}
+
+	@Override
+	public List<User> findUserByAccountAndPass(String account, String password) {
+		// TODO Auto-generated method stub
+		return userDao.findUserByAccountAndPass(account, password);
 	}
 
 }

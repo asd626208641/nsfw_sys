@@ -15,16 +15,25 @@
 	<constant name="struts.ui.theme" value="simple" />
 	<!-- 包含test的struts配置文件 -->
 	<include file="cn/itcast/test/conf/test-struts.xml" />
-	<!-- 包含用戶的struts配置文件 -->
+	<!-- 包含user的struts配置文件 -->
 	<include file="cn/itcast/nsfw/user/conf/user-struts.xml" />
+	<!-- 包含role的struts配置文件 -->
+	<include file="cn/itcast/nsfw/role/conf/role-struts.xml" />
+	<!-- 包含主页home的struts配置文件 -->
+	<include file="cn/itcast/home/conf/home-struts.xml" />
+	<!-- 包含子页home的struts配置文件 -->
+	<include file="cn/itcast/nsfw/home/conf/home-struts.xml" />
+	<!-- 包含登录界面的的struts配置文件 -->
+	<include file="cn/itcast/login/conf/login-struts.xml" />
 
 	<!-- 配置全局异常处理及异常映射 -->
 	<package name="base-default" extends="struts-default">
 		<!-- 返回结果类型 -->
 		<result-types>
-			<result-type name="error" class="cn.itcast.core.action.SysResultAction"></result-type>
+			<result-type name="error"
+				class="cn.itcast.core.action.SysResultAction"></result-type>
 		</result-types>
-		<!-- 全局返回结果-->
+		<!-- 全局返回结果 -->
 		<global-results>
 			<result name="sysError">/WEB-INF/jsp/error.jsp</result>
 			<result name="input">/WEB-INF/jsp/error.jsp</result>
@@ -32,8 +41,10 @@
 		</global-results>
 		<!-- 全局异常映射 -->
 		<global-exception-mappings>
-			<exception-mapping result="sysError" exception="cn.itcast.core.exception.SysException"></exception-mapping>
-			<exception-mapping result="input" exception="java.lang.Exception"></exception-mapping>
+			<exception-mapping result="sysError"
+				exception="cn.itcast.core.exception.SysException"></exception-mapping>
+			<exception-mapping result="input"
+				exception="java.lang.Exception"></exception-mapping>
 		</global-exception-mappings>
 	</package>
 

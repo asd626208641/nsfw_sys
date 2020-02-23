@@ -13,16 +13,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.aspectj.util.FileUtil;
 
+import com.opensymphony.xwork2.ActionContext;
+
 import cn.itcast.core.action.BaseAction;
 import cn.itcast.core.exception.ActionException;
 import cn.itcast.core.exception.ServiceException;
 import cn.itcast.core.exception.SysException;
+import cn.itcast.nsfw.role.service.RoleService;
 import cn.itcast.nsfw.user.entity.User;
+import cn.itcast.nsfw.user.entity.UserRole;
 import cn.itcast.nsfw.user.service.UserService;
 
 public class UserAction extends BaseAction {
 	@Resource
 	private UserService userService;
+	@Resource
+	private RoleService roleService;
 	private List<User> userList;
 	private User user;
 
@@ -33,7 +39,8 @@ public class UserAction extends BaseAction {
 	private File userExcel;
 	private String userExcelContentType;
 	private String userExcelFileName;
-
+	private String [] userRoleIds;
+	
 	// 列表页面
 	public String listUI() throws Exception {
 		try {
@@ -47,6 +54,8 @@ public class UserAction extends BaseAction {
 
 	// 跳转到增加页面
 	public String addUI() {
+		// 加载角色列表
+		ActionContext.getContext().getContextMap().put("roleList",roleService.findObjects());
 		return "addUI";
 	}
 
@@ -65,7 +74,7 @@ public class UserAction extends BaseAction {
 					// 设置用户头像路径
 					user.setHeadImg("user/" + fileName);
 				}
-				userService.save(user);
+				userService.saveUserAndRole(user,userRoleIds);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -76,8 +85,17 @@ public class UserAction extends BaseAction {
 
 	// 跳转到编辑页面
 	public String editUI() {
+		ActionContext.getContext().getContextMap().put("roleList",roleService.findObjects());
 		if (user != null && user.getId() != null) {
 			user = userService.findObjectById(user.getId());
+			//处理角色回显
+			List<UserRole> list=userService.getUserRolesByUserId(user.getId());
+			if(list!=null&&list.size()>0) {
+				userRoleIds=new String [list.size()];
+				for(int i=0;i<list.size();i++) {
+					userRoleIds[i]=list.get(i).getId().getRole().getRoleId();
+				}
+			}	
 		}
 		return "editUI";
 	}
@@ -103,7 +121,7 @@ public class UserAction extends BaseAction {
 					user.setHeadImg("user/" + fileName);
 				}
 				// System.out.println(road.split("/")[1].getClass().getName().toString());
-				userService.update(user);
+				userService.updateUserAndRole(user,userRoleIds);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -254,4 +272,13 @@ public class UserAction extends BaseAction {
 		this.userExcelFileName = userExcelFileName;
 	}
 
+	public String[] getUserRoleIds() {
+		return userRoleIds;
+	}
+
+	public void setUserRoleIds(String[] userRoleIds) {
+		this.userRoleIds = userRoleIds;
+	}
+
+	
 }
