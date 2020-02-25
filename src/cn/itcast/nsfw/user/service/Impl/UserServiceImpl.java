@@ -55,6 +55,8 @@ public class UserServiceImpl implements UserService {
 	public void delete(Serializable id) {
 		// TODO Auto-generated method stub
 		userDao.delete(id);
+		//删除用户对应的所有权限
+		userDao.deleteUserRoleByUserId(id);
 	}
 
 	@Override
@@ -150,7 +152,7 @@ public class UserServiceImpl implements UserService {
 		// 根据用户删除用户所有角色
 		userDao.deleteUserRoleByUserId(user.getId());
 		// 更新用户
-		save(user);
+		update(user);
 		// 更新用户对应的角色
 		if (RoleId != null) {
 			for (String roleId : RoleId) {

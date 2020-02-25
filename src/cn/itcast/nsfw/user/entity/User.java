@@ -1,6 +1,7 @@
 package cn.itcast.nsfw.user.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
 	private String id;
@@ -15,6 +16,7 @@ public class User {
 	private String email;
 	private Date birthday;
 	private String memo;
+	private List<UserRole> userRoles;
 
 	// 用户状态,在userService中用到了下面的参数设置用户的默认状态
 	public static String USER_STATE_VALID = "1";
@@ -137,6 +139,14 @@ public class User {
 
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
 }

@@ -1,12 +1,10 @@
 package cn.itcast.nsfw.user.dao.Impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
 
 import cn.itcast.core.dao.impl.BaseDaoImpl;
 import cn.itcast.nsfw.user.dao.UserDao;
@@ -35,7 +33,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	}
 
 	@Override
-	public void deleteUserRoleByUserId(String id) {
+	public void deleteUserRoleByUserId(Serializable id) {
 		Query query = getSession().createQuery("DELETE FROM UserRole WHERE id.userId=? ");
 		query.setParameter(0, id);
 		query.executeUpdate();
@@ -43,9 +41,8 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
 	@Override
 	public List<UserRole> getUserRolesByUserId(String id) {
-		Query query = getSession().createQuery("FROM UserRole WHERE id.userId=? ");
+		Query query = getSession().createQuery("FROM UserRole WHERE id.userId=?");
 		query.setParameter(0, id);
-		query.executeUpdate();
 		return query.list();
 	}
 

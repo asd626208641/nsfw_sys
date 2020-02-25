@@ -1,8 +1,7 @@
 package cn.itcast.nsfw.user.dao;
 
+import java.io.Serializable;
 import java.util.List;
-
-import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
 import cn.itcast.core.dao.BaseDao;
 import cn.itcast.nsfw.user.entity.User;
@@ -17,7 +16,7 @@ public interface UserDao extends BaseDao<User> {
 	public void saveUserRole(UserRole userRole);
 	
 	//根据用户id删除所有用户角色信息
-	public void deleteUserRoleByUserId(String id);
+	public void deleteUserRoleByUserId(Serializable id);
 	
 	//根据用户id删除所有用户角色信息
 	public List<UserRole> getUserRolesByUserId(String id);
