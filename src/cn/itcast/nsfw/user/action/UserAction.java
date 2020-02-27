@@ -39,13 +39,13 @@ public class UserAction extends BaseAction {
 	private File userExcel;
 	private String userExcelContentType;
 	private String userExcelFileName;
-	private String [] userRoleIds;
-	
+	private String[] userRoleIds;
+
 	// 列表页面
 	public String listUI() throws Exception {
 		try {
 			userList = userService.findObjects();
-		} catch (ServiceException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw new Exception(e.getMessage());
 		}
@@ -55,7 +55,7 @@ public class UserAction extends BaseAction {
 	// 跳转到增加页面
 	public String addUI() {
 		// 加载角色列表
-		ActionContext.getContext().getContextMap().put("roleList",roleService.findObjects());
+		ActionContext.getContext().getContextMap().put("roleList", roleService.findObjects());
 		return "addUI";
 	}
 
@@ -74,7 +74,7 @@ public class UserAction extends BaseAction {
 					// 设置用户头像路径
 					user.setHeadImg("user/" + fileName);
 				}
-				userService.saveUserAndRole(user,userRoleIds);
+				userService.saveUserAndRole(user, userRoleIds);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -85,17 +85,17 @@ public class UserAction extends BaseAction {
 
 	// 跳转到编辑页面
 	public String editUI() {
-		ActionContext.getContext().getContextMap().put("roleList",roleService.findObjects());
+		ActionContext.getContext().getContextMap().put("roleList", roleService.findObjects());
 		if (user != null && user.getId() != null) {
 			user = userService.findObjectById(user.getId());
-			//处理角色回显
-			List<UserRole> list=userService.getUserRolesByUserId(user.getId());
-			if(list!=null&&list.size()>0) {
-				userRoleIds=new String [list.size()];
-				for(int i=0;i<list.size();i++) {
-					userRoleIds[i]=list.get(i).getId().getRole().getRoleId();
+			// 处理角色回显
+			List<UserRole> list = userService.getUserRolesByUserId(user.getId());
+			if (list != null && list.size() > 0) {
+				userRoleIds = new String[list.size()];
+				for (int i = 0; i < list.size(); i++) {
+					userRoleIds[i] = list.get(i).getId().getRole().getRoleId();
 				}
-			}	
+			}
 		}
 		return "editUI";
 	}
@@ -121,7 +121,7 @@ public class UserAction extends BaseAction {
 					user.setHeadImg("user/" + fileName);
 				}
 				// System.out.println(road.split("/")[1].getClass().getName().toString());
-				userService.updateUserAndRole(user,userRoleIds);
+				userService.updateUserAndRole(user, userRoleIds);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -280,5 +280,4 @@ public class UserAction extends BaseAction {
 		this.userRoleIds = userRoleIds;
 	}
 
-	
 }

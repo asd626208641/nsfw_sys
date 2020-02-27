@@ -25,7 +25,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import cn.itcast.core.exception.ServiceException;
+import cn.itcast.core.service.Impl.BaseServiceImpl;
 import cn.itcast.core.util.ExcelUtil;
+import cn.itcast.nsfw.info.dao.InfoDao;
 import cn.itcast.nsfw.role.entity.Role;
 import cn.itcast.nsfw.user.dao.UserDao;
 import cn.itcast.nsfw.user.entity.User;
@@ -34,41 +36,22 @@ import cn.itcast.nsfw.user.entity.UserRoleId;
 import cn.itcast.nsfw.user.service.UserService;
 
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 
-	@Resource
 	private UserDao userDao;
 
-	@Override
-	public void save(User user) {
-		// TODO Auto-generated method stub
-		userDao.save(user);
-	}
-
-	@Override
-	public void update(User user) {
-		// TODO Auto-generated method stub
-		userDao.update(user);
+	@Resource
+	public void setUserDao(UserDao userDao) {
+		super.setBaseDao(userDao);
+		this.userDao = userDao;
 	}
 
 	@Override
 	public void delete(Serializable id) {
 		// TODO Auto-generated method stub
 		userDao.delete(id);
-		//删除用户对应的所有权限
+		// 删除用户对应的所有权限
 		userDao.deleteUserRoleByUserId(id);
-	}
-
-	@Override
-	public User findObjectById(Serializable id) {
-		// TODO Auto-generated method stub
-		return userDao.findObjectById(id);
-	}
-
-	@Override
-	public List<User> findObjects() throws ServiceException {
-		// TODO Auto-generated method stub
-		return userDao.findObjects();
 	}
 
 	@Override
