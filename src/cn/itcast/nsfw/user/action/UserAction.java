@@ -2,6 +2,7 @@ package cn.itcast.nsfw.user.action;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,9 +17,7 @@ import org.aspectj.util.FileUtil;
 import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.core.action.BaseAction;
-import cn.itcast.core.exception.ActionException;
-import cn.itcast.core.exception.ServiceException;
-import cn.itcast.core.exception.SysException;
+import cn.itcast.core.util.QueryHelper;
 import cn.itcast.nsfw.role.service.RoleService;
 import cn.itcast.nsfw.user.entity.User;
 import cn.itcast.nsfw.user.entity.UserRole;
@@ -29,7 +28,6 @@ public class UserAction extends BaseAction {
 	private UserService userService;
 	@Resource
 	private RoleService roleService;
-	private List<User> userList;
 	private User user;
 
 	private File headImg; // 这是struts为我们以及封装好了 只要headImg名字与前面一致 后面两个名字+ContentType 这样类型 再get set方法就可以自动获取了
@@ -40,11 +38,22 @@ public class UserAction extends BaseAction {
 	private String userExcelContentType;
 	private String userExcelFileName;
 	private String[] userRoleIds;
+	private String strName;
 
 	// 列表页面
 	public String listUI() throws Exception {
+		QueryHelper queryHelper = new QueryHelper(User.class, "u");
 		try {
-			userList = userService.findObjects();
+			if (user != null) {
+				if (StringUtils.isNotBlank(user.getName())) {
+					user.setName(URLDecoder.decode(user.getName(), "utf-8")); // 把加密信息进行解码
+					queryHelper.addCondition("u.name like ?", "%" + user.getName() + "%");
+				}
+				// queryHelper.addCondition("u.state = ?", "1"); // 停用还是发布的状态
+			}
+			// userList = userService.findObjects(queryHelper);
+			pageResult = userService.getPageResult(queryHelper, getPageNo(), getPageSize());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			throw new Exception(e.getMessage());
@@ -87,6 +96,7 @@ public class UserAction extends BaseAction {
 	public String editUI() {
 		ActionContext.getContext().getContextMap().put("roleList", roleService.findObjects());
 		if (user != null && user.getId() != null) {
+			strName = user.getName();
 			user = userService.findObjectById(user.getId());
 			// 处理角色回显
 			List<UserRole> list = userService.getUserRolesByUserId(user.getId());
@@ -149,15 +159,10 @@ public class UserAction extends BaseAction {
 		return "list";
 	}
 
-	public List<User> getUserList() {
-		return userList;
-	}
-
 	// 导出用户列表
 	public void exportExcel() {
 		try {
 			// 1.查找用戶列表
-			userList = userService.findObjects();
 			// 2.导出
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("application/x-excel");
@@ -165,7 +170,7 @@ public class UserAction extends BaseAction {
 					"attachment;fileName=" + new String("用户列表.xlsx".getBytes(), "ISO-8859-1"));
 			ServletOutputStream outputStream = response.getOutputStream();
 			// 上述三句代码就只是实现下载功能
-			userService.exportExcel(userList, outputStream);
+			userService.exportExcel(userService.findObjects(), outputStream);
 			if (outputStream != null) {
 				outputStream.close();
 			}
@@ -210,10 +215,6 @@ public class UserAction extends BaseAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
 	}
 
 	public User getUser() {
@@ -278,6 +279,14 @@ public class UserAction extends BaseAction {
 
 	public void setUserRoleIds(String[] userRoleIds) {
 		this.userRoleIds = userRoleIds;
+	}
+
+	public String getStrName() {
+		return strName;
+	}
+
+	public void setStrName(String strName) {
+		this.strName = strName;
 	}
 
 }
