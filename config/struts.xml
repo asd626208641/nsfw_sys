@@ -27,7 +27,9 @@
 	<include file="cn/itcast/login/conf/login-struts.xml" />
 	<!-- 包含信息发布管理的struts配置文件 -->
 	<include file="cn/itcast/nsfw/info/conf/info-struts.xml" />
-
+	<!-- 包含投诉管理的struts配置文件 -->
+	<include file="cn/itcast/nsfw/complain/conf/complain-struts.xml" />
+	
 	<!-- 配置全局异常处理及异常映射 -->
 	<package name="base-default" extends="struts-default">
 		<!-- 返回结果类型 -->

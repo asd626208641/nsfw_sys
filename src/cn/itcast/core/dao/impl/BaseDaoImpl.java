@@ -7,8 +7,8 @@ import java.util.List;
 import org.hibernate.Query;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import cn.itcast.core.pageResult;
 import cn.itcast.core.dao.BaseDao;
+import cn.itcast.core.page.PageResult;
 import cn.itcast.core.util.QueryHelper;
 
 public abstract class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
@@ -69,7 +69,7 @@ public abstract class BaseDaoImpl<T> extends HibernateDaoSupport implements Base
 	}
 
 	// 根据分页查询
-	public pageResult getPageResult(QueryHelper queryHelper, int pageNo, int pageSize) {
+	public PageResult getPageResult(QueryHelper queryHelper, int pageNo, int pageSize) {
 		Query query = getSession().createQuery(queryHelper.getQueryListHql());
 		List<Object> parameters = queryHelper.getParameters();
 		if (parameters != null) {
@@ -91,6 +91,6 @@ public abstract class BaseDaoImpl<T> extends HibernateDaoSupport implements Base
 		}
 		long totalCount = (Long) queryCount.uniqueResult();
 
-		return new pageResult(totalCount, pageNo, pageSize, items);
+		return new PageResult(totalCount, pageNo, pageSize, items);
 	}
 }

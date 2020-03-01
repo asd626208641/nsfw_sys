@@ -3,7 +3,7 @@ package cn.itcast.core.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import cn.itcast.core.pageResult;
+import cn.itcast.core.page.PageResult;
 import cn.itcast.core.util.QueryHelper;
 
 public interface BaseDao<T> {
@@ -29,6 +29,6 @@ public interface BaseDao<T> {
 	public List<T> findObjects(QueryHelper queryHelper);
 
 	// 根据分页查询
-	public pageResult getPageResult(QueryHelper queryHelper, int pageNo, int pageSize);
+	public PageResult getPageResult(QueryHelper queryHelper, int pageNo, int pageSize);
 
 }
