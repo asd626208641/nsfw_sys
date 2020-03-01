@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+
+<struts>
+	<package name="login-action" namespace="/sys"
+		extends="base-default">
+		<action name="login_*"
+			class="cn.itcast.login.action.LoginAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/{1}.jsp</result>  <!--/web-inf 表示直接定位到这个根目录下 -->
+			<result name="loginUI">/WEB-INF/jsp/loginUI.jsp</result>
+			<result name="NoPermissionUI">/WEB-INF/jsp/noPermissionUI.jsp</result>
+			<result name="home" type="redirectAction">
+				<param name="actionName">home_</param>
+			</result>
+		</action>
+	</package>
+</struts>
+
+<!-- 配置action的作用就是让struts2知道哪个Action处理哪个请求 -->

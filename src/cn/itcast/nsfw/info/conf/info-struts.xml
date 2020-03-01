@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+
+<struts>
+	<package name="info-action" namespace="/nsfw"
+		extends="base-default">
+		<action name="info_*"
+			class="cn.itcast.nsfw.info.action.InfoAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/nsfw/info/{1}.jsp</result>  <!--/web-inf 表示直接定位到这个根目录下 -->
+			<result name="list" type="redirectAction">
+				<param name="actionName">info_listUI</param>
+				<param name="info.title">${strTitle}</param>
+				<param name="pageNo">${pageNo}</param>
+				<param name="encode">true</param>         <!-- 为了防止浏览器输入框中的中文出现乱码，将中文加密在到其他地方解密就不会有乱码 -->
+
+			</result>
+		</action>
+	</package>
+</struts>
+
+<!-- 配置action的作用就是让struts2知道哪个Action处理哪个请求 -->
