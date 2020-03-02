@@ -59,7 +59,7 @@ public class QueryHelper {
 	 **/
 	public void addOrderByProperty(String property, String order) {
 		if (orderClause.length() > 1) {
-			orderClause += " , " + property + " " + order; // 非第一个排序属性
+			orderClause += "," + property + " " + order; // 非第一个排序属性
 		} else {
 			orderClause += " ORDER BY " + property + " " + order; // 第一个排序属性
 		}

@@ -7,12 +7,24 @@
 <struts>
 	<package name="sysHome-action" namespace="/sys"
 		extends="base-default">
-		<action name="home_*"
-			class="cn.itcast.home.action.HomeAction" method="{1}">
-			<result name="{1}">/WEB-INF/jsp/{1}.jsp</result>  <!--/web-inf 表示直接定位到这个根目录下 -->
+		<action name="home_*" class="cn.itcast.home.action.HomeAction"
+			method="{1}">
+			<result name="{1}">/WEB-INF/jsp/home/{1}.jsp</result>  <!--/web-inf 表示直接定位到这个根目录下 -->
 			<result name="home">/WEB-INF/jsp/home/home.jsp</result>
 		</action>
 	</package>
+
+
+	<package extends="json-default" namespace="/sys"
+		name="sysHomeJson-action">
+		<action name="home_getUserJson" method="getUserJson"
+			class="cn.itcast.home.action.HomeAction">
+			<result type="json">
+				<param name="root">return_map</param>
+			</result>
+		</action>
+	</package>
+
 </struts>
 
 <!-- 配置action的作用就是让struts2知道哪个Action处理哪个请求 -->
