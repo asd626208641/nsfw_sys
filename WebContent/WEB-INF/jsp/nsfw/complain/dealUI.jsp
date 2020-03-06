@@ -101,6 +101,12 @@
         </tr>
     </table>
     <s:hidden name="complain.compId"/>
+    <s:hidden name="strTitle"/>
+    <s:hidden name="strState"/>
+    <s:hidden name="startTime"/>
+    <s:hidden name="endTime"/>
+
+
     <div class="tc mt20">
         <input type="submit" class="btnB2" value="保存" />
         &nbsp;&nbsp;&nbsp;&nbsp;

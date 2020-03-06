@@ -25,7 +25,10 @@ public class ComplainAction extends BaseAction {
 	private String startTime;
 	private String endTime;
 	private ComplainReply reply;
-
+	private String strTitle;
+	private String strState;
+	
+	
 	// 列表
 	public String listUI() {
 		// 加载状态集合
@@ -75,6 +78,8 @@ public class ComplainAction extends BaseAction {
 		// 加载状态集合
 		ActionContext.getContext().getContextMap().put("complainStateMap", complain.COMPLAIN_STATE_MAP);
 		if (complain != null) {
+			strTitle=complain.getCompTitle();
+			strState=complain.getState();
 			complain = complainService.findObjectById(complain.getCompId());
 
 		}
@@ -129,6 +134,22 @@ public class ComplainAction extends BaseAction {
 
 	public void setReply(ComplainReply reply) {
 		this.reply = reply;
+	}
+
+	public String getStrTitle() {
+		return strTitle;
+	}
+
+	public void setStrTitle(String strTitle) {
+		this.strTitle = strTitle;
+	}
+
+	public String getStrState() {
+		return strState;
+	}
+
+	public void setStrState(String strState) {
+		this.strState = strState;
 	}
 
 }

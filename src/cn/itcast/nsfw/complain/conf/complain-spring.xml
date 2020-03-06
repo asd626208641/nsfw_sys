@@ -12,4 +12,29 @@
     
     <!-- 扫描service -->
     <context:component-scan base-package="cn.itcast.nsfw.complain.service.Impl"></context:component-scan>
+    
+     <!-- 1、制定任务信息信息 -->
+	<bean id="complainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 设置执行对象 -->
+		<property name="targetObject" ref="complainService"></property>  <!-- complainService是注解的值 -->
+		<!-- 设置执行对象中对应的执行方法 -->
+		<property name="targetMethod" value="autoDeal"></property>
+		<!-- 是否可以同步执行；不可同步执行 -->
+		<property name="concurrent" value="false"></property>
+	</bean>
+     <!-- 2、制定任务执行时机（任务执行触发器） -->
+     <bean id="complainCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<!-- 设置任务详细信息 -->
+     	<property name="jobDetail" ref="complainJobDetail"></property>
+     	<!-- 设置任务执行时间点，cronExpression: 在每月的月底晚上的23点59分钟的第59秒执行任务 -->
+     	<property name="cronExpression" value="59 59 23 L * ?"></property>
+     </bean>
+     <!-- 3、设置调度工厂 -->
+     <bean id="complainScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+     	<property name="triggers">
+     		<list>
+     			<ref bean="complainCronTrigger"/>
+     		</list>
+     	</property>
+     </bean>
 </beans>
