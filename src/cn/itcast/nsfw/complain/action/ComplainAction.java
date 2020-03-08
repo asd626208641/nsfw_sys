@@ -2,12 +2,17 @@ package cn.itcast.nsfw.complain.action;
 
 import java.net.URLDecoder;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionContext;
 
@@ -27,8 +32,8 @@ public class ComplainAction extends BaseAction {
 	private ComplainReply reply;
 	private String strTitle;
 	private String strState;
-	
-	
+	private Map<String, Object> statisticMap;
+
 	// 列表
 	public String listUI() {
 		// 加载状态集合
@@ -78,8 +83,8 @@ public class ComplainAction extends BaseAction {
 		// 加载状态集合
 		ActionContext.getContext().getContextMap().put("complainStateMap", complain.COMPLAIN_STATE_MAP);
 		if (complain != null) {
-			strTitle=complain.getCompTitle();
-			strState=complain.getState();
+			strTitle = complain.getCompTitle();
+			strState = complain.getState();
 			complain = complainService.findObjectById(complain.getCompId());
 
 		}
@@ -99,11 +104,34 @@ public class ComplainAction extends BaseAction {
 				reply.setReplyTime(new Timestamp(new Date().getTime()));
 				tem.getComplainReplies().add(reply);
 			}
-			complainService.update(tem);//当状态更新的时候，级联保存reply。
+			complainService.update(tem);// 当状态更新的时候，级联保存reply。
 		}
 		return "list";
 	}
 
+	// 跳转到统计页面
+	public String annualStatisticChartUI() {
+		return "annualStatisticChartUI";
+	}
+
+	//根据年度获取该年度下的统计数
+	public String getAnnualStatisticData(){
+		//1、获取年份
+		HttpServletRequest request = ServletActionContext.getRequest();
+		int year = 0;
+		if(request.getParameter("year") != null){
+			year = Integer.valueOf(request.getParameter("year"));
+		} else {
+			//默认 当前年份
+			year = Calendar.getInstance().get(Calendar.YEAR);
+		}
+		//2、获取统计年度的每个月的投诉数
+		statisticMap = new HashMap<String, Object>();
+		statisticMap.put("msg", "success");
+		statisticMap.put("chartData", complainService.getAnnualStatisticDataByYear(year));
+		return "annualStatisticData";
+	}
+	
 	public Complain getComplain() {
 		return complain;
 	}
@@ -150,6 +178,14 @@ public class ComplainAction extends BaseAction {
 
 	public void setStrState(String strState) {
 		this.strState = strState;
+	}
+
+	public Map<String, Object> getStatisticMap() {
+		return statisticMap;
+	}
+
+	public void setStatisticMap(Map<String, Object> statisticMap) {
+		this.statisticMap = statisticMap;
 	}
 
 }

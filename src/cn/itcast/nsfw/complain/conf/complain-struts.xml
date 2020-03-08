@@ -5,7 +5,7 @@
 
 <struts>
 	<package name="complain-action" namespace="/nsfw"
-		extends="base-default">
+		extends="base-default,json-default">
 		<action name="complain_*"
 			class="cn.itcast.nsfw.complain.action.ComplainAction" method="{1}">
 			<result name="{1}">/WEB-INF/jsp/nsfw/complain/{1}.jsp</result>
@@ -18,7 +18,9 @@
 				<param name="pageNo">${pageNo}</param>
 				<param name="encode">true</param>
 			</result>
-
+			<result type="json" name="annualStatisticData">
+				<param name="root">statisticMap</param>
+			</result>
 		</action>
 	</package>
 
