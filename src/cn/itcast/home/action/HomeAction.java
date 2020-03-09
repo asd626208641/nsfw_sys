@@ -1,10 +1,9 @@
 package cn.itcast.home.action;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -14,18 +13,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
+import cn.itcast.core.Constant.Constant;
 import cn.itcast.core.util.QueryHelper;
 import cn.itcast.nsfw.complain.entity.Complain;
 import cn.itcast.nsfw.complain.service.ComplainService;
+import cn.itcast.nsfw.info.entity.Info;
+import cn.itcast.nsfw.info.service.InfoService;
 import cn.itcast.nsfw.user.entity.User;
 import cn.itcast.nsfw.user.service.UserService;
 
 public class HomeAction extends ActionSupport {
 	@Resource
 	private UserService userService;
-
+	@Resource
+	private InfoService infoService;
 	@Resource
 	private ComplainService complainService;
 
@@ -33,10 +37,53 @@ public class HomeAction extends ActionSupport {
 
 	private Complain comp;
 
+	private Info info;
+
 	public String execute() {
+		// 加载信息列表
+		// 加载分类集合
+		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
+		QueryHelper queryHelper1 = new QueryHelper(Info.class, "i");
+		queryHelper1.addOrderByProperty("i.createTime", QueryHelper.ORDER_BY_DESC);
+		List<Info> infoList = infoService.getPageResult(queryHelper1, 1, 5).getItems();
+		ActionContext.getContext().getContextMap().put("infoList", infoList);
+
+		User user = (User) ServletActionContext.getRequest().getSession().getAttribute(Constant.USER);
+		// 加载我的投诉信息列表
+		// 加载状态集合
+		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+		QueryHelper queryHelper2 = new QueryHelper(Complain.class, "c");
+		queryHelper2.addCondition("c.compName = ?", user.getName());
+		// 根据投诉时间升序排序
+		queryHelper2.addOrderByProperty("c.compTime", QueryHelper.ORDER_BY_ASC);
+		// 根据投诉状态降序排序
+		queryHelper2.addOrderByProperty("c.state", QueryHelper.ORDER_BY_DESC);
+		List<Complain> complainList = complainService.getPageResult(queryHelper2, 1, 6).getItems();
+		ActionContext.getContext().getContextMap().put("complainList", complainList);
 		return "home";
 	}
 
+	//查看信息
+	public String infoViewUI(){
+		//加载分类集合
+		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
+		if(info != null){
+			info = infoService.findObjectById(info.getInfoId());
+		}
+		return "infoViewUI";
+	}
+	
+	//查看投诉信息
+	public String complainViewUI(){
+		//加载状态集合
+		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+		if(comp != null){
+			comp = complainService.findObjectById(comp.getCompId());
+		}
+		return "complainViewUI";
+	}
+	
+	// 跳转到我要投诉
 	public String complainAddUI() {
 		return "complainAddUI";
 	}
@@ -94,5 +141,11 @@ public class HomeAction extends ActionSupport {
 	public void setComp(Complain comp) {
 		this.comp = comp;
 	}
+	public Info getInfo() {
+		return info;
+	}
 
+	public void setInfo(Info info) {
+		this.info = info;
+	}
 }

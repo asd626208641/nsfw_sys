@@ -26,7 +26,7 @@
 <script type="text/javascript"
 	src="${basePath }js/fusioncharts/fusioncharts.charts.js"></script>
 <script type="text/javascript"
-	src="${basePath }js/fusioncharts/themes/fusioncharts.theme.ocean.js"></script>
+	src="${basePath }js/fusioncharts/themes/fusioncharts.theme.fint.js"></script>
 <script type="text/javascript">
 //加载dom元素后，执行统计方法
 
