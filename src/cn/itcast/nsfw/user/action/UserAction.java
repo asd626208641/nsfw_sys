@@ -30,7 +30,7 @@ public class UserAction extends BaseAction {
 	private RoleService roleService;
 	private User user;
 
-	private File headImg; // 这是struts为我们以及封装好了 只要headImg名字与前面一致 后面两个名字+ContentType 这样类型 再get set方法就可以自动获取了
+	private File headImg; // 这是struts为我们以及封装好了 只要headImg名字与前面一致 后面两个属性 这样类型 再get set方法就可以实现上传了
 	private String headImgContentType;
 	private String headImgFileName;
 
@@ -120,11 +120,12 @@ public class UserAction extends BaseAction {
 					String filePath = ServletActionContext.getServletContext().getRealPath("upload/user");
 					String fileName = UUID.randomUUID().toString().replaceAll("-", "")
 							+ headImgFileName.substring(headImgFileName.lastIndexOf("."));
-					// 老图的名字
-					String old_fileName = user.getHeadImg().split("/")[1];
-					// 删除老图
-					new File(filePath + "\\" + old_fileName).delete();
-
+					if (user.getHeadImg() != null) {
+						// 老图的名字
+						String old_fileName = user.getHeadImg().split("/")[1];
+						// 删除老图
+						new File(filePath + "\\" + old_fileName).delete();
+					}
 					// 复制文件
 					FileUtil.copyFile(headImg, new File(filePath, fileName));
 					// 设置用户头像路径
